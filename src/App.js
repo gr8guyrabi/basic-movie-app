@@ -1,33 +1,31 @@
 import React, {useEffect, useState} from 'react'
 
 import SearchIcon from './assets/images/search.svg'
+import {MovieCard} from './components'
+
 import './App.css'
 
 const API_URL = `http://www.omdbapi.com?apikey=${process.env.REACT_APP_OMDB_APIKEY}`
 
-const movie1 = {
-    "Title": 'batman',
-    "Year": '2022',
-    "imdbID": 'tt234nk23',
-    "Type": 'movie',
-    "Poster": 'N/A'
-}
-
 const App = () => {
-    const [search, setSearch] = useState('batman')
-    const searchMovies = async (title) => {
-        const response = await fetch(`${API_URL}&s=${title}}`)
+    const [searchTerm, setSearchTerm] = useState('batman')
+    const [movies, setMovies] = useState([])
+    const searchMovies = async () => {
+        const response = await fetch(`${API_URL}&s=${searchTerm}}`)
         const data = await response.json()
 
-        console.log(data.Search)
+        setMovies(data.Search || [])
+    }
+
+    const handleChange = (e) => {
+        e.preventDefault()
+        setSearchTerm(e.target.value)
     }
 
     useEffect(() => {
-        searchMovies(search)
-        
+        searchMovies(searchTerm)
     }, [])
     
-        
     return (
         <div className="app">
             <h1>MovieLand</h1>
@@ -35,96 +33,31 @@ const App = () => {
             <div className="search">
                 <input
                     placeholder="Search for movies..."
-                    value={search}
-                    onChange={() => {}}
+                    value={searchTerm}
+                    onChange={(e) => handleChange(e)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            searchMovies()
+                        }
+                    }}
                 />
                 <img 
                     src={SearchIcon}
                     alt="search" 
-                    onClick={() => {}}
+                    onClick={searchMovies}
                 />
             </div>
-
-            <div className="container">
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
+            {movies.length ? (
+                <div className="container">
+                    {movies?.map(movie => (
+                        <MovieCard key={movie.imdbID} {...movie} />
+                    ))}
                 </div>
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
+            ) : (
+                <div className="empty">
+                    <h2>No movies found</h2>
                 </div>
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
-                </div>
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
-                </div>
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
-                </div>
-                <div className="movie">
-                    <div>
-                        <p>{movie1.Year}</p>
-                    </div>
-                    <div>
-                        <img src={movie1.Poster !== 'N/A' ? movie1.Poster : 'https://via.placeholder.com/400'} alt={movie1.Title} />
-                    </div>
-
-                    <div>
-                        <span>{movie1.Type}</span>
-                        <h3>{movie1.Title}</h3>
-                    </div>
-                </div>
-            </div>
+            ) }
         </div>
     )
 }
