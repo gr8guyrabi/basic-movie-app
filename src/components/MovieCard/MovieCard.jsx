@@ -2,19 +2,19 @@ import React from 'react'
 
 import './MovieCard.css'
 
-const MovieCard = ({ Year, Title, Type, Poster }) => {
+const MovieCard = ({ id, title, description, image }) => {
   return (
     <div className="movie">
         <div>
-            <p>{Year}</p>
+            <p>{description}</p>
         </div>
         <div>
-            <img src={Poster !== 'N/A' ? Poster : 'https://via.placeholder.com/400'} alt={Title} />
+            <img src={image !== 'N/A' ? image : 'https://via.placeholder.com/400'} alt={title} />
         </div>
 
         <div>
-            <span>{Type}</span>
-            <h3>{Title}</h3>
+            <span>{description}</span>
+            <h3>{title}</h3>
         </div>
     </div>
   )

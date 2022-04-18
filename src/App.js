@@ -5,16 +5,17 @@ import {MovieCard} from './components'
 
 import './App.css'
 
-const API_URL = `http://www.omdbapi.com?apikey=${process.env.REACT_APP_OMDB_APIKEY}`
+// const OMDB_API_URL = `http://www.omdbapi.com?apikey=${process.env.REACT_APP_OMDB_APIKEY}`
+const IMDB_API_URL = `https://imdb-api.com/en/API/Search/${process.env.REACT_APP_IMDB_APIKEY}`
 
 const App = () => {
     const [searchTerm, setSearchTerm] = useState('batman')
     const [movies, setMovies] = useState([])
     const searchMovies = async () => {
-        const response = await fetch(`${API_URL}&s=${searchTerm}}`)
+        // const response = await fetch(`${OMDB_API_URL}&s=${searchTerm}}`)  //OMDB
+        const response = await fetch(`${IMDB_API_URL}/${searchTerm}`)
         const data = await response.json()
-
-        setMovies(data.Search || [])
+        setMovies(data.results || [])
     }
 
     const handleChange = (e) => {
@@ -50,7 +51,7 @@ const App = () => {
             {movies.length ? (
                 <div className="container">
                     {movies?.map(movie => (
-                        <MovieCard key={movie.imdbID} {...movie} />
+                        <MovieCard key={movie.id} {...movie} />
                     ))}
                 </div>
             ) : (
