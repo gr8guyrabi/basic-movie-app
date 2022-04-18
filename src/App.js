@@ -12,7 +12,7 @@ const App = () => {
     const [searchTerm, setSearchTerm] = useState('batman')
     const [movies, setMovies] = useState([])
     const searchMovies = async () => {
-        // const response = await fetch(`${OMDB_API_URL}&s=${searchTerm}}`)  //OMDB
+        // const response = await fetch(`${OMDB_API_URL}&s=${searchTerm}}`)  //OMDB :D
         const response = await fetch(`${IMDB_API_URL}/${searchTerm}`)
         const data = await response.json()
         setMovies(data.results || [])
